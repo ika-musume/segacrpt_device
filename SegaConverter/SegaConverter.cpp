@@ -4,9 +4,9 @@
 
 
 int main() {
-    std::ifstream MameKey;                                  //SegaKey 클래스 생성 
-    std::ofstream FlashKey; // ("FlashKey.bin", std::ios::out | std::ios::binary);
-    KeyHandler SegaKey;                                     //ReadKey 클래스 생성
+    std::ifstream MameKey;      //SegaKey 클래스 생성 
+    std::ofstream FlashKey;     // ("FlashKey.bin", std::ios::out | std::ios::binary);
+    KeyHandler SegaKey;          //ReadKey 클래스 생성
 
     SegaKey.openKey(&MameKey);
     SegaKey.searchKey(&MameKey);

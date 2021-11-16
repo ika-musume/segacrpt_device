@@ -3,7 +3,7 @@
 #include <fstream>
 #include "KeyHandler.h"
 
-void KeyHandler::openKey(std::ifstream* KeyFile) {                  //open file on class KeyFile
+void KeyHandler::openKey(std::ifstream* KeyFile) { //open file on class KeyFile
     KeyFile->open("key.txt", std::ios::in);
 
     fileOpenErr = 0;
@@ -13,12 +13,12 @@ void KeyHandler::openKey(std::ifstream* KeyFile) {                  //open file 
     }
 }
 
-void KeyHandler::closeKey(std::ifstream* KeyFile) {                     //open file on class KeyFile
-    for (int i = 0; i <= keysetNum; i++) {          //생성된 배열 모두 해제
+void KeyHandler::closeKey(std::ifstream* KeyFile) { //open file on class KeyFile
+    for (int i = 0; i <= keysetNum; i++) { //생성된 배열 모두 해제
         delete[] keysetMemList[i];
     }
 
-    if (KeyFile->is_open()) {   //열렸으면 닫기
+    if (KeyFile->is_open()) { //열렸으면 닫기
         KeyFile->close();
     }
 }
@@ -56,7 +56,7 @@ void KeyHandler::searchKey(std::ifstream* KeyFile) {                    //open f
                 std::cout << "Found key " << keysetNum << std::endl;
                 keysetMemList[keysetNum] = new uint8_t[128];            //unit8 128바이트 공간 할당 및 시작주소 넣기
 
-                inCharBuf[0] = { '0' };                                   //입력 버퍼 초기화         
+                inCharBuf[0] = { '0' };                                 //입력 버퍼 초기화         
                 inCharBuf[1] = { '0' };
                 writePointer = 0;                                       //쓰기 포인터 초기화
 
@@ -155,8 +155,6 @@ void KeyHandler::saveKey(std::ofstream* FlashFile, int keysetNum, int M1, int A1
     char flashKey[8192] = { 0 };
 
     for (unsigned int COUNTER = 0; COUNTER < 0x2000; COUNTER++) {
-        
-
         unsigned int KEYSET_ADDRESS = 0;
         bool KEYSET_XOR = 0;
         char CPU_DATA = 0;
@@ -167,20 +165,20 @@ void KeyHandler::saveKey(std::ofstream* FlashFile, int keysetNum, int M1, int A1
         char FLASH_DATA = 0;
 
 
-        KEYSET_ADDRESS = (((COUNTER >> 3) & 1) +        //D3
-            (((COUNTER >> 5) & 1) << 1) +  //D5
-            (((COUNTER >> 12) & 1) << 2) + ///M1
-            (((COUNTER >> 8) & 1) << 3) +  //A0
-            (((COUNTER >> 9) & 1) << 4) +  //A4
-            (((COUNTER >> 10) & 1) << 5) + //A8
-            (((COUNTER >> 11) & 1) << 6)); //A12
-        KEYSET_XOR = ((COUNTER >> 7) & 1);          //D7
+        KEYSET_ADDRESS =    (((COUNTER >> 3) & 1) +        //D3
+                            (((COUNTER >> 5) & 1) << 1) +  //D5
+                            (((COUNTER >> 12) & 1) << 2) + ///M1
+                            (((COUNTER >> 8) & 1) << 3) +  //A0
+                            (((COUNTER >> 9) & 1) << 4) +  //A4
+                            (((COUNTER >> 10) & 1) << 5) + //A8
+                            (((COUNTER >> 11) & 1) << 6)); //A12
+        KEYSET_XOR =        ((COUNTER >> 7) & 1);          //D7
 
-        CPU_DATA = ((COUNTER & 1) +               //D0
-            (((COUNTER >> 1) & 1) << 1) +  //D1
-            (((COUNTER >> 2) & 1) << 2) +  //D2
-            (((COUNTER >> 4) & 1) << 4) +  //D4
-            (((COUNTER >> 6) & 1) << 6));  //D6
+        CPU_DATA =          ((COUNTER & 1) +               //D0
+                            (((COUNTER >> 1) & 1) << 1) +  //D1
+                            (((COUNTER >> 2) & 1) << 2) +  //D2
+                            (((COUNTER >> 4) & 1) << 4) +  //D4
+                            (((COUNTER >> 6) & 1) << 6));  //D6
 
 
         if (KEYSET_XOR == 1) {
@@ -189,24 +187,24 @@ void KeyHandler::saveKey(std::ofstream* FlashFile, int keysetNum, int M1, int A1
 
         KEY_BUFFER = *(*(keysetMemList + keysetNum) + KEYSET_ADDRESS);     //MAME 키 데이터 버퍼로 가져오기
 
-        FLASH_DATA = CPU_DATA +
-            (((((KEY_BUFFER >> 3) & 1) ^ KEYSET_XOR) << 3) + //D3
-                ((((KEY_BUFFER >> 5) & 1) ^ KEYSET_XOR) << 5) +  //D5
-                ((((KEY_BUFFER >> 7) & 1) ^ KEYSET_XOR) << 7));  //D7
+        FLASH_DATA =    CPU_DATA +
+                        (((((KEY_BUFFER >> 3) & 1) ^ KEYSET_XOR) << 3) + //D3
+                        ((((KEY_BUFFER >> 5) & 1) ^ KEYSET_XOR) << 5) +  //D5
+                        ((((KEY_BUFFER >> 7) & 1) ^ KEYSET_XOR) << 7));  //D7
 
         FLASH_ADDRESS = ((((COUNTER >> 0) & 1) << D0) +  //D0
-            (((COUNTER >> 1) & 1) << D1) +   //D1
-            (((COUNTER >> 2) & 1) << D2) +   //D2
-            (((COUNTER >> 3) & 1) << D3) +   //D3
-            (((COUNTER >> 4) & 1) << D4) +   //D4
-            (((COUNTER >> 5) & 1) << D5) +   //D5
-            (((COUNTER >> 6) & 1) << D6) +   //D6
-            (((COUNTER >> 7) & 1) << D7) +   //D7
-            (((COUNTER >> 8) & 1) << A0) +   //A0
-            (((COUNTER >> 9) & 1) << A4) +   //A4
-            (((COUNTER >> 10) & 1) << A8) +  //A5
-            (((COUNTER >> 11) & 1) << A12) + //A12
-            (((COUNTER >> 12) & 1) << M1));  //M1
+                        (((COUNTER >> 1) & 1) << D1) +   //D1
+                        (((COUNTER >> 2) & 1) << D2) +   //D2
+                        (((COUNTER >> 3) & 1) << D3) +   //D3
+                        (((COUNTER >> 4) & 1) << D4) +   //D4
+                        (((COUNTER >> 5) & 1) << D5) +   //D5
+                        (((COUNTER >> 6) & 1) << D6) +   //D6
+                        (((COUNTER >> 7) & 1) << D7) +   //D7
+                        (((COUNTER >> 8) & 1) << A0) +   //A0
+                        (((COUNTER >> 9) & 1) << A4) +   //A4
+                        (((COUNTER >> 10) & 1) << A8) +  //A5
+                        (((COUNTER >> 11) & 1) << A12) + //A12
+                        (((COUNTER >> 12) & 1) << M1));  //M1
 
         flashKey[FLASH_ADDRESS] = FLASH_DATA;
     }
